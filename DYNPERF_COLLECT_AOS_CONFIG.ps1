@@ -190,9 +190,9 @@ function AOSevt([String]$strAOS){
 
 
     # Get events from Application Log and filter
-    $DPAEvents = (Get-EventLog -LogName Application -Computer $strAOS -After $currDate14) | 
-            select EventID, TimeGenerated, EntryType, Source, InstanceId, Message, MachineName | 
-            where {($_.EntryType -eq"Error") -or ($_.EntryType -eq"Warning") -or 
+    $DPAEvents = (Get-EventLog -LogName Application -Computer $strAOS -After $currDate14) | `
+            select EventID, TimeGenerated, EntryType, Source, InstanceId, Message, MachineName | `
+            where {($_.EntryType -eq"Error") -or ($_.EntryType -eq"Warning") -or `
                    (($_.EntryType -eq"Information") -and ($_.EventID -eq 149)) } 
     
     #Write-host "   END   - Collect Events from " $strAOS

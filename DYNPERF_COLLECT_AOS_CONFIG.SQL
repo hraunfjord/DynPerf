@@ -1,7 +1,11 @@
 /******   Recreate JOB DYNPERF_COLLECT_AOS_CONFIG with PowerShell script   
-		  Author: hraunfjord@gmail.com
-		  When script has been run, go to the job and configure DB servers and DB name
-		  (As with VBS script)                                                         ******/
+		Author: hraunfjord@gmail.com
+		When script has been run, go to the job and configure DB servers and DB name
+		(As with VBS script)                                                         
+		Check Powershell script security : https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-5.1
+		Check that the the SQLAgent account has privileges to access AOS the Registry and EventLog 
+		(or configure SQL credentials and Proxy user to run this job)
+******/
 
 
 USE [msdb]
@@ -245,9 +249,9 @@ function AOSevt([String]$strAOS){
 
 
     # Get events from Application Log and filter
-    $DPAEvents = (Get-EventLog -LogName Application -Computer $strAOS -After $currDate14) | 
-            select EventID, TimeGenerated, EntryType, Source, InstanceId, Message, MachineName | 
-            where {($_.EntryType -eq"Error") -or ($_.EntryType -eq"Warning") -or 
+    $DPAEvents = (Get-EventLog -LogName Application -Computer $strAOS -After $currDate14) | `
+            select EventID, TimeGenerated, EntryType, Source, InstanceId, Message, MachineName | `
+            where {($_.EntryType -eq"Error") -or ($_.EntryType -eq"Warning") -or `
                    (($_.EntryType -eq"Information") -and ($_.EventID -eq 149)) } 
     
     #Write-host "   END   - Collect Events from " $strAOS
